@@ -1,3 +1,4 @@
 click==3.3
 requests==2.4.3
+requests-cache==0.4.6
 wsgiref==0.1.2

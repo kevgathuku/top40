@@ -58,3 +58,7 @@ target/
 
 # Venv
 .venv
+
+# Sqlite database
+*.sqlite
+

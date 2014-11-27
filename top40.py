@@ -3,6 +3,10 @@
 
 import click
 import requests
+import requests_cache
+
+# Cache the API calls and expire after 12 hours
+requests_cache.install_cache(expire_after=43200)
 
 url = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
@@ -25,3 +29,4 @@ def get_charts(count):
 
 if __name__ == '__main__':
     get_charts()
+
