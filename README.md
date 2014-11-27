@@ -1,3 +1,3 @@
-# TOP 40 - A command line application that prints the UK Top 40 Charts
+# Top 40
 
-A simple program that prints the UK Top 40 charts on the command line
+A simple command line program that prints out the UK Top 40 singles charts
