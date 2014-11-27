@@ -12,6 +12,7 @@ url = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
 @click.command()
 @click.option('--count',
+    type=click.IntRange(1, 40, clamp=True),
     default=10,
     help='Number of songs to show. Maximum is 40')
 
