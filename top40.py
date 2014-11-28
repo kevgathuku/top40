@@ -11,7 +11,7 @@ requests_cache.install_cache(expire_after=43200)
 url = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
 @click.command()
-@click.option('--count',
+@click.option('-c', '--count',
     type=click.IntRange(1, 40, clamp=True),
     default=10,
     help='Number of songs to show. Maximum is 40')
