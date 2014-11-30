@@ -16,7 +16,7 @@ YOUTUBE_API_VERSION = "v3"
 # Cache the API calls and expire after 12 hours
 requests_cache.install_cache(expire_after=43200)
 
-def get_charts():
+def _get_charts():
     """Retrieves the current UK Top 40 Charts"""
 
     url = 'http://ben-major.co.uk/labs/top40/api/singles/'
@@ -25,30 +25,7 @@ def get_charts():
 
     return data
 
-# @click.command()
-# @click.option('-c', '--count',
-#     type=click.IntRange(1, 40, clamp=True),
-#     default=10,
-#     help='Number of songs to show. Maximum is 40')
-
-def print_charts(count):
-    """Prints the top COUNT songs in the UK Top 40 chart."""
-
-    data = get_charts()[:count]
-
-    for index, element in enumerate(data, start=1):
-        click.echo(
-            '{}. {} - {}'.format(
-                index,
-                element['title'],
-                element['artist'].encode('utf-8', 'replace')))
-
-# @click.command()
-# @click.option('-q', '--query',
-#     type=click.STRING,
-#     help='Search query')
-
-def youtube_search(query, max_results=1):
+def _youtube_search(query, max_results=1):
     """Search Youtube for QUERY, returning MAX_RESULTS
         Returns a dict of video ID and TITLE mappings
     """
@@ -71,29 +48,48 @@ def youtube_search(query, max_results=1):
     for search_result in search_response.get("items", []) 
     if search_result["id"]["kind"] == "youtube#video"}
 
-    # print "Videos:\n"
-    # for key, val in videos.items():
-    #         print "ID: {} Title: {}".format(key, val), "\n"
-
     # Dict in format {title: id}
     return videos
 
-def download_songs(pos):
-    """Downloads the song occupying the POS spot in the charts"""
+def download_song(pos):
+    """Downloads the song occupying the POS spot in the UK Top 40 charts"""
 
-    data = get_charts()
+    data = _get_charts()
     pos -=1
     
     search = '{} - {}'.format(
-                data[pos]['title'],
+                data[pos]['title'].encode('utf-8', 'replace'),
                 data[pos]['artist'].encode('utf-8', 'replace'))
-    dl = youtube_search(search)
+    try:
+        dl = _youtube_search(search)
+    except HttpError as e:
+        print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
 
     ydl_opts = {}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         print "Downloading " + dl.keys()[0]
         ydl.download(dl.values())
 
+@click.command()
+@click.option('-c', '--count', default=10, help='Number of Songs to Print')
+@click.option('--yes', is_flag=True, expose_value=False,
+              prompt='Do you want to download a song in this list?')
+# @click.option('-p', '--pos', type=click.INT, callback=download_song,
+#    help='Chart position of song to download',
+#    prompt=True)
+
+def print_charts(count):
+    """Prints the top COUNT songs in the UK Top 40 chart."""
+
+    data = _get_charts()[:count]
+
+    for index, element in enumerate(data, start=1):
+        click.echo(
+            '{}. {} - {}'.format(
+                index,
+                element['title'],
+                element['artist'].encode('utf-8', 'replace')))
+
 
 if __name__ == '__main__':
-    download_songs(1)
+    print_charts()
