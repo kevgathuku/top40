@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import os
 import click
 import requests
@@ -59,10 +60,9 @@ def cli():
     pass
 
 @cli.command()
-@click.option('-p', '--position',
+@click.option('-p', '--pos',
     type=click.IntRange(1, 40, clamp=True),
-    help='Chart position of song to download',
-    prompt=True)
+    help='Chart position of song to download')
 
 def download(pos):
     """Download the song occupying the position specified"""
