@@ -64,8 +64,8 @@ def cli():
     help='Chart position of song to download',
     prompt=True)
 
-def download_song(pos):
-    """Downloads the song occupying the POS spot in the UK Top 40 charts"""
+def download(pos):
+    """Download the song occupying the position specified"""
 
     data = _get_charts()
     pos -=1
@@ -86,8 +86,10 @@ def download_song(pos):
 @cli.command()
 @click.option('-c', '--count', default=10, help='Number of Songs to Print')
 
-def print_charts(count):
-    """Prints the top COUNT songs in the charts."""
+def display(count):
+    """Prints the songs in the chart.
+       By default the top 10 songs are printed
+    """
 
     data = _get_charts()[:count]
 
