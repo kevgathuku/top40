@@ -84,7 +84,10 @@ def download(pos):
         ydl.download(dl.values())
 
 @cli.command()
-@click.option('-c', '--count', default=10, help='Number of Songs to Print')
+@click.option('-c', '--count', 
+    default=10, 
+    type=click.IntRange(1, 40, clamp=True),
+    help='Number of Songs to Print')
 
 def display(count):
     """Prints the songs in the chart. By default the top 10 songs are printed
