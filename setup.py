@@ -9,7 +9,7 @@ setup(
     py_modules=['top40'],
     author = 'kevgathuku',
     author_email = 'kevgathuku@gmail.com',
-    description = ("Print and optionally donwload songs in the "
+    description = ("Print and optionally download songs in the "
                     "UK Top 40 Charts"),
     url='https://github.com/kevgathuku/top40',
     license = "MIT",
