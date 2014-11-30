@@ -51,6 +51,19 @@ def _youtube_search(query, max_results=1):
     # Dict in format {title: id}
     return videos
 
+@click.group()
+def cli():
+    """A simple command line tool to print songs in the UK Top 40 Charts
+        and optionally donwloads any song in the charts 
+    """
+    pass
+
+@cli.command()
+@click.option('-p', '--position',
+    type=click.IntRange(1, 40, clamp=True),
+    help='Chart position of song to download',
+    prompt=True)
+
 def download_song(pos):
     """Downloads the song occupying the POS spot in the UK Top 40 charts"""
 
@@ -70,16 +83,11 @@ def download_song(pos):
         print "Downloading " + dl.keys()[0]
         ydl.download(dl.values())
 
-@click.command()
+@cli.command()
 @click.option('-c', '--count', default=10, help='Number of Songs to Print')
-@click.option('--yes', is_flag=True, expose_value=False,
-              prompt='Do you want to download a song in this list?')
-# @click.option('-p', '--pos', type=click.INT, callback=download_song,
-#    help='Chart position of song to download',
-#    prompt=True)
 
 def print_charts(count):
-    """Prints the top COUNT songs in the UK Top 40 chart."""
+    """Prints the top COUNT songs in the charts."""
 
     data = _get_charts()[:count]
 
@@ -90,6 +98,5 @@ def print_charts(count):
                 element['title'],
                 element['artist'].encode('utf-8', 'replace')))
 
-
 if __name__ == '__main__':
-    print_charts()
+    cli()
