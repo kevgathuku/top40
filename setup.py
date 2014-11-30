@@ -7,7 +7,7 @@ setup(
     name='top40',
     version='0.1',
     py_modules=['top40'],
-    author = 'kevgathuku',
+    author = "Kevin Ndung'u",
     author_email = 'kevgathuku@gmail.com',
     description = ("Print and optionally download songs in the "
                     "UK Top 40 Charts"),
