@@ -26,3 +26,6 @@ the UK Top 40 singles charts
 ## Help
 
 `top40 --help`
+
+## Disclaimer:
+Use at your own risk. 
