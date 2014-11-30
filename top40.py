@@ -96,7 +96,7 @@ def display(count):
         click.echo(
             '{}. {} - {}'.format(
                 index,
-                element['title'],
+                element['title'].encode('utf-8', 'replace'),
                 element['artist'].encode('utf-8', 'replace')))
 
 if __name__ == '__main__':
