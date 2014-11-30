@@ -87,8 +87,7 @@ def download(pos):
 @click.option('-c', '--count', default=10, help='Number of Songs to Print')
 
 def display(count):
-    """Prints the songs in the chart.
-       By default the top 10 songs are printed
+    """Prints the songs in the chart. By default the top 10 songs are printed
     """
 
     data = _get_charts()[:count]
@@ -97,7 +96,7 @@ def display(count):
         click.echo(
             '{}. {} - {}'.format(
                 index,
-                element['title'],
+                element['title'].encode('utf-8', 'replace'),
                 element['artist'].encode('utf-8', 'replace')))
 
 if __name__ == '__main__':
