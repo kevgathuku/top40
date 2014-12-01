@@ -15,7 +15,7 @@ setup(
     license = "MIT",
     install_requires=[
         'Click>=3.3',
-        'Requests',
+        'requests>=1.1.0',
         'requests-cache',
         'google-api-python-client',
     ],
