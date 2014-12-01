@@ -11,7 +11,7 @@ export DEVELOPER_KEY = "Your developer key"
 
 `git clone https://github.com/kevgathuku/top40`  
 `cd top40`  
-`python setup.py install`
+`pip install -r requirements.txt`
 
 ## Usage
 
