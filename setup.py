@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='top40',
-    version='0.1',
+    version='0.1.2',
     py_modules=['top40'],
     author = "Kevin Ndung'u",
     author_email = 'kevgathuku@gmail.com',
@@ -18,6 +18,7 @@ setup(
         'requests>=1.1.0',
         'requests-cache',
         'google-api-python-client',
+        'youtube-dl',
     ],
     entry_points='''
         [console_scripts]

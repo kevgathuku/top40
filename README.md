@@ -5,13 +5,13 @@ the UK Top 40 singles charts
 
 ## Setup
 Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)  
-export DEVELOPER_KEY = "Your developer key"
+export DEVELOPER_KEY="Your developer key"
 
 ## Install
 
 `git clone https://github.com/kevgathuku/top40`  
 `cd top40`  
-`python setup.py install`
+`pip install -r requirements.txt`
 
 ## Usage
 
