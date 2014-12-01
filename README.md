@@ -3,6 +3,10 @@
 A simple command line program that prints and optionally downloads
 the UK Top 40 singles charts
 
+## Setup
+Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)  
+export DEVELOPER_KEY = "Your developer key"
+
 ## Install
 
 `git clone https://github.com/kevgathuku/top40`  
@@ -28,4 +32,4 @@ the UK Top 40 singles charts
 `top40 --help`
 
 ## Disclaimer:
-Use at your own risk. 
+Check your local copyright laws before using this tool to download music
