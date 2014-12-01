@@ -5,7 +5,7 @@ the UK Top 40 singles charts
 
 ## Setup
 Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)  
-export DEVELOPER_KEY = "Your developer key"
+export DEVELOPER_KEY="Your developer key"
 
 ## Install
 
