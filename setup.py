@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name='top40',
-    version='0.1',
+    version='0.1.2',
     py_modules=['top40'],
     author = "Kevin Ndung'u",
     author_email = 'kevgathuku@gmail.com',
