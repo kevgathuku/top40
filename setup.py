@@ -18,6 +18,7 @@ setup(
         'requests>=1.1.0',
         'requests-cache',
         'google-api-python-client',
+        'youtube-dl',
     ],
     entry_points='''
         [console_scripts]
