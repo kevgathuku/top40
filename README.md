@@ -7,8 +7,9 @@ the UK Top 40 singles charts
 Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)
 This is required for accessing the YouTube API.
 
-Rename the provided .env.example file to .env
-Open up the .env file and set the developer key you obtained from Google
+For only displaying the songs, this is not required.
+
+Set the developer key as an environment variable:
 `export DEVELOPER_KEY="Your developer key"`
 
 ## Install
@@ -36,11 +37,13 @@ Example usage:
 
 ### Downloading a song
 
-`top40 download [OPTIONS]`
+Example usage:
+
+`top40 download -p 30`            Download the song occupying position 30 song in the chart
 
 #### OPTIONS
     -h, --help                   print this help text and exit
-    -p, --pos                    Position in the chart of the song to download
+    -p, --pos                    The chart position of the song to download
 
 ## Help
 
