@@ -22,6 +22,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        top40=top40:cli
+        top40=top40:top40
     ''',
 )
