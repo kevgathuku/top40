@@ -4,8 +4,12 @@ A simple command line program that prints and optionally downloads
 the UK Top 40 singles charts
 
 ## Setup
-Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)  
-export DEVELOPER_KEY="Your developer key"
+Obtain a developer key from [Google](https://developers.google.com/youtube/registering_an_application)
+This is required for accessing the YouTube API.
+
+Rename the provided .env.example file to .env
+Open up the .env file and set the developer key you obtained from Google
+`export DEVELOPER_KEY="Your developer key"`
 
 ## Install
 
@@ -15,15 +19,26 @@ export DEVELOPER_KEY="Your developer key"
 
 ## Usage
 
-`top40 display [OPTIONS]`
+There are two basic commands:
 
-### OPTIONS
+`top40 display [OPTIONS]`  
+`top40 download [OPTIONS]`
+
+### Displaying Songs
+
+Example usage:
+
+`top40 display -n 30`            This displays the top 30 songs in the chart
+
+#### OPTIONS
     -h, --help                   print this help text and exit
-    -c, --count                  Number of songs to display. Maximum of 40
+    -n, --num                    Specify the number of songs to display. Maximum of 40
+
+### Downloading a song
 
 `top40 download [OPTIONS]`
 
-### OPTIONS
+#### OPTIONS
     -h, --help                   print this help text and exit
     -p, --pos                    Position in the chart of the song to download
 
