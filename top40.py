@@ -81,7 +81,8 @@ def top40():
     default=10,
     type=click.IntRange(1, 40, clamp=True),
     help='Number of Songs to Display')
-def display(num):
+@click.option('--links', is_flag=True)
+def display(num, links):
     """Displays the top 'num' songs in the chart.
        If 'num' is not provided, 10 songs are displayed by default.
     """
@@ -89,22 +90,29 @@ def display(num):
     data = _get_charts(TOP40_URL)[:num]
 
     for index, element in enumerate(data, start=1):
+        if links:
+            search = '{} - {}'.format(
+            data[index-1]['title'].encode('utf-8', 'replace'),
+            data[index-1]['artist'].encode('utf-8', 'replace'))
 
-        search = '{} - {}'.format(
-        data[index-1]['title'].encode('utf-8', 'replace'),
-        data[index-1]['artist'].encode('utf-8', 'replace'))
+            try:
+                search_result = _youtube_search(search)
+            except HttpError as e:
+                print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
 
-        try:
-            search_result = _youtube_search(search)
-        except HttpError as e:
-            print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+            click.echo(
+                '{}. {} - {} (http://youtu.be/{})'.format(
+                    index,
+                    element['title'].encode('utf-8', 'replace'),
+                    element['artist'].encode('utf-8', 'replace'),
+                    search_result.values()[0]))
+        else:
+            click.echo(
+                '{}. {} - {}'.format(
+                    index,
+                    element['title'].encode('utf-8', 'replace'),
+                    element['artist'].encode('utf-8', 'replace')))
 
-        click.echo(
-            '{}. {} - {} (http://youtu.be/{})'.format(
-                index,
-                element['title'].encode('utf-8', 'replace'),
-                element['artist'].encode('utf-8', 'replace'),
-                search_result.values()[0]))
 
 if __name__ == '__main__':
     top40()
