@@ -12,21 +12,17 @@ import youtube_dl
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 
-# Read env variables from a .env file
+# Read env variables from a .env file if available
 dotenv.read_dotenv()
 
 # Cache the API calls and expire after 12 hours
 requests_cache.install_cache(expire_after=43200)
 
-DEVELOPER_KEY = os.environ['DEVELOPER_KEY']
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+TOP40_URL = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
-
-def _get_charts():
+def _get_charts(url):
     """Retrieves the current UK Top 40 Charts"""
 
-    url = 'http://ben-major.co.uk/labs/top40/api/singles/'
     response = requests.get(url).json()
     data = response['entries']
 
@@ -37,6 +33,15 @@ def _youtube_search(query, max_results=1):
     """Search Youtube for QUERY, returning MAX_RESULTS
         Returns a dict of video ID and TITLE mappings
     """
+
+    YOUTUBE_API_SERVICE_NAME = "youtube"
+    YOUTUBE_API_VERSION = "v3"
+
+    try:
+        DEVELOPER_KEY = os.environ['DEVELOPER_KEY']
+    except KeyError as e:
+        print "Please set the DEVELOPER_KEY env variable"
+        exit()
 
     youtube = build(
         YOUTUBE_API_SERVICE_NAME,
@@ -66,7 +71,6 @@ def _youtube_search(query, max_results=1):
 @click.group()
 def top40():
     """A simple command line tool to display songs in the UK Top 40 Charts
-       It can also donwload any song in the charts.
     """
     pass
 
@@ -77,44 +81,37 @@ def top40():
     default=10,
     type=click.IntRange(1, 40, clamp=True),
     help='Number of Songs to Display')
-def display(num):
+@click.option('--links', is_flag=True)
+def display(num, links):
     """Displays the top 'num' songs in the chart.
-       If 'num' is not provided, it defaults to 10.
+       If 'num' is not provided, 10 songs are displayed by default.
     """
 
-    data = _get_charts()[:num]
+    data = _get_charts(TOP40_URL)[:num]
 
     for index, element in enumerate(data, start=1):
-        click.echo(
-            '{}. {} - {}'.format(
-                index,
-                element['title'].encode('utf-8', 'replace'),
-                element['artist'].encode('utf-8', 'replace')))
+        if links:
+            search = '{} - {}'.format(
+            data[index-1]['title'].encode('utf-8', 'replace'),
+            data[index-1]['artist'].encode('utf-8', 'replace'))
 
+            try:
+                search_result = _youtube_search(search)
+            except HttpError as e:
+                print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
 
-@top40.command()
-@click.option(
-    '-p', '--pos',
-    type=click.IntRange(1, 40, clamp=True),
-    help='Chart position of song to download')
-def download(pos):
-    """Download the song occupying the position specified"""
-
-    data = _get_charts()
-    pos -= 1
-
-    search = '{} - {}'.format(
-        data[pos]['title'].encode('utf-8', 'replace'),
-        data[pos]['artist'].encode('utf-8', 'replace'))
-    try:
-        dl = _youtube_search(search)
-    except HttpError as e:
-        print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
-
-    ydl_opts = {}
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        print "Downloading " + dl.keys()[0]
-        ydl.download(dl.values())
+            click.echo(
+                '{}. {} - {} (http://youtu.be/{})'.format(
+                    index,
+                    element['title'].encode('utf-8', 'replace'),
+                    element['artist'].encode('utf-8', 'replace'),
+                    search_result.values()[0]))
+        else:
+            click.echo(
+                '{}. {} - {}'.format(
+                    index,
+                    element['title'].encode('utf-8', 'replace'),
+                    element['artist'].encode('utf-8', 'replace')))
 
 
 if __name__ == '__main__':
