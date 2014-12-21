@@ -22,7 +22,7 @@ TOP40_URL = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
 def _get_charts(url):
     """Retrieves the current UK Top 40 Charts"""
-    
+
     response = requests.get(url).json()
     data = response['entries']
 
@@ -83,38 +83,28 @@ def top40():
     help='Number of Songs to Display')
 def display(num):
     """Displays the top 'num' songs in the chart.
-       If 'num' is not provided, it defaults to 10.
+       If 'num' is not provided, 10 songs are displayed by default.
     """
 
     data = _get_charts(TOP40_URL)[:num]
 
     for index, element in enumerate(data, start=1):
+
+        search = '{} - {}'.format(
+        data[index-1]['title'].encode('utf-8', 'replace'),
+        data[index-1]['artist'].encode('utf-8', 'replace'))
+
+        try:
+            search_result = _youtube_search(search)
+        except HttpError as e:
+            print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+
         click.echo(
-            '{}. {} - {}'.format(
+            '{}. {} - {} (http://youtu.be/{})'.format(
                 index,
                 element['title'].encode('utf-8', 'replace'),
-                element['artist'].encode('utf-8', 'replace')))
-
-
-def download(pos):
-    """Download the song occupying the position specified"""
-
-    data = _get_charts(TOP40_URL)
-    pos -= 1
-
-    search = '{} - {}'.format(
-        data[pos]['title'].encode('utf-8', 'replace'),
-        data[pos]['artist'].encode('utf-8', 'replace'))
-    try:
-        dl = _youtube_search(search)
-    except HttpError as e:
-        print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
-
-    ydl_opts = {}
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        print "Downloading " + dl.keys()[0]
-        ydl.download(dl.values())
-
+                element['artist'].encode('utf-8', 'replace'),
+                search_result.values()[0]))
 
 if __name__ == '__main__':
     top40()
