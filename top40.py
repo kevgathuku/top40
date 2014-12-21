@@ -4,21 +4,18 @@
 import os
 
 import click
-import dotenv
 import requests
 import requests_cache
-import youtube_dl
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 
-# Read env variables from a .env file if available
-dotenv.read_dotenv()
 
 # Cache the API calls and expire after 12 hours
 requests_cache.install_cache(expire_after=43200)
 
 TOP40_URL = 'http://ben-major.co.uk/labs/top40/api/singles/'
+
 
 def _get_charts(url):
     """Retrieves the current UK Top 40 Charts"""
@@ -92,13 +89,14 @@ def display(num, links):
     for index, element in enumerate(data, start=1):
         if links:
             search = '{} - {}'.format(
-            data[index-1]['title'].encode('utf-8', 'replace'),
-            data[index-1]['artist'].encode('utf-8', 'replace'))
+                data[index-1]['title'].encode('utf-8', 'replace'),
+                data[index-1]['artist'].encode('utf-8', 'replace'))
 
             try:
                 search_result = _youtube_search(search)
             except HttpError as e:
-                print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
+                print "An HTTP error %d occurred:\n%s" % (
+                    e.resp.status, e.content)
 
             click.echo(
                 '{}. {} - {} (http://youtu.be/{})'.format(
