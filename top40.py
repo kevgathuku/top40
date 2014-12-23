@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import tempfile
 
 import click
 import requests
@@ -12,7 +13,10 @@ from apiclient.errors import HttpError
 
 
 # Cache the API calls and expire after 12 hours
-requests_cache.install_cache(expire_after=43200)
+# Saves sqlite db cache in tmp directory
+requests_cache.install_cache(
+    cache_name='{}/top40cache'.format(
+        tempfile.gettempdir()), expire_after=43200)
 
 TOP40_URL = 'http://ben-major.co.uk/labs/top40/api/singles/'
 
